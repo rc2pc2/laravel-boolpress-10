@@ -5,10 +5,16 @@
 
 </p>
 
+## Steps to create a new Laravel.x auth project using bootstrap and laravel/ui
+- Create a new Laravel 10.x project `composer create-project laravel/laravel **your_project_name**`
+- Install the needed package `composer require laravel/ui`
+- Apply the new auth scaffolding using bootstrap and laravel/ui: `php artisan ui bootstrap --auth`
+- Run `npm i` and
+- Configure correctly the `.env` file
+- Run `php artisan migrate` 
+- Run `php artisan serve` with `npm run dev`
+
 ## Steps to use this project correctly:
-- Open this repository and click on  `Use this template ---> Create a new repository`
-- Clone the repository wherever you want to develop, e.g. `VS Code`, `VSCodium`, ecc.
-- **Open** the cloned folder with a `terminal`
 - Copy and paste the `.env.example` file and rename it into `.env` **without removing the `env.example` file**
 - Run `composer install` to install all our composer packages
 - Run `php artisan key:generate` to generate our custom application key
