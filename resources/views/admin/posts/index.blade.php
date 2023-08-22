@@ -29,10 +29,10 @@
                                 {{ $post->slug }}
                             </td>
                             <td>
-                                <a href="" class="btn btn-sm btn-primary">
+                                <a href="{{ route('admin.posts.show', $post->id) }}" class="btn btn-sm btn-primary">
                                     View
                                 </a>
-                                <a href="" class="btn btn-sm btn-success">
+                                <a href="{{ route('admin.posts.edit', $post->id) }}" class="btn btn-sm btn-success">
                                     Edit
                                 </a>
                                 <a href="" class="btn btn-sm btn-warning">
