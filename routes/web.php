@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Guest\HomeController as GuestHomeController;
 
 /*
@@ -19,6 +20,7 @@ Auth::routes();
 
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/', [ AdminDashboardController::class , 'home'])->name('home');
+    Route::resource('/posts', PostController::class);
 });
 
 Route::name('guest.')->group(function () {

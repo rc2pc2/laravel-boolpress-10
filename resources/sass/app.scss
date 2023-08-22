@@ -1,8 +1,10 @@
 // Fonts
+@use 'partials/adminPost';
 @import url('https://fonts.bunny.net/css?family=Nunito');
 
 // Variables
-@import 'variables';
+@import 'partials/variables';
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
