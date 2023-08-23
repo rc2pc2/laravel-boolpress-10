@@ -86,4 +86,17 @@ class PostController extends Controller
         $post->delete();
         return redirect()->route('admin.posts.index');
     }
+
+    public function deletedIndex(){
+        $posts = Post::onlyTrashed()->paginate(10);
+
+        return view('admin.posts.deleted', compact('posts'));
+    }
+
+    public function restore($id){
+        $post = Post::onlyTrashed()->findOrFail($id);
+        $post->restore();
+
+        return redirect()->route('admin.posts.show', $post);
+    }
 }
