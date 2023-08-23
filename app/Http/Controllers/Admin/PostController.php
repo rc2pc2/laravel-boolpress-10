@@ -38,6 +38,7 @@ class PostController extends Controller
             'image' => ['url:https'],
             'content' => ['required', 'min:10'],
         ]);
+        $data["slug"] = Str::of($data['title'])->slug('-');
         $newPost = Post::create($data);
         $newPost->slug = Str::of("$newPost->id " . $data['title'])->slug('-');
         $newPost->save();
@@ -93,16 +94,16 @@ class PostController extends Controller
         return view('admin.posts.deleted', compact('posts'));
     }
 
-    public function restore($id){
-        $post = Post::onlyTrashed()->findOrFail($id);
+    public function restore($slug){
+        $post = Post::onlyTrashed()->findOrFail($slug);
         $post->restore();
 
         return redirect()->route('admin.posts.show', $post);
     }
 
-    public function obliterate($id)
+    public function obliterate($slug)
     {
-        $post = Post::onlyTrashed()->findOrFail($id);
+        $post = Post::onlyTrashed()->findOrFail($slug);
         $post->forceDelete();
 
         return redirect()->route('admin.posts.index');
