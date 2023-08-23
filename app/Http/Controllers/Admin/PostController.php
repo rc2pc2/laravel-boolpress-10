@@ -38,9 +38,9 @@ class PostController extends Controller
             'image' => ['url:https'],
             'content' => ['required', 'min:10'],
         ]);
-
-        $data['slug'] = Str::of($data['title'])->slug('-');
         $newPost = Post::create($data);
+        $newPost->slug = Str::of("$newPost->id " . $data['title'])->slug('-');
+        $newPost->save();
 
         return redirect()->route('admin.posts.index');
     }
@@ -71,7 +71,7 @@ class PostController extends Controller
             'image' => ['url:https'],
             'content' => ['required', 'min:10'],
         ]);
-        $data['slug'] = Str::of($data['title'])->slug('-');
+        $data['slug'] = Str::of("$post->id " . $data['title'])->slug('-');
 
         $post->update($data);
 
