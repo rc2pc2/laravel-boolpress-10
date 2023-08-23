@@ -18,7 +18,7 @@ class PostSeeder extends Seeder
             $newPost = new Post();
             $newPost->title = ucfirst($faker->unique()->words(4, true));
             $newPost->content = $faker->paragraphs(10, true);
-            $newPost->slug = $faker->slug();
+            $newPost->slug = $faker->unique()->slug();
             $newPost->image = $faker->imageUrl(480, 360, 'post', true, 'posts', true, 'png');
             $newPost->save();
         }
