@@ -12,7 +12,7 @@ use Illuminate\Validation\Rule;
 class PostController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the Post resource.
      */
     public function index()
     {
@@ -21,7 +21,7 @@ class PostController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new Post resource.
      */
     public function create()
     {
@@ -29,7 +29,7 @@ class PostController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Post resource in storage.
      */
     public function store(Request $request)
     {
@@ -38,16 +38,18 @@ class PostController extends Controller
             'image' => ['url:https'],
             'content' => ['required', 'min:10'],
         ]);
+
         $data["slug"] = Str::of($data['title'])->slug('-');
         $newPost = Post::create($data);
+
         $newPost->slug = Str::of("$newPost->id " . $data['title'])->slug('-');
         $newPost->save();
 
-        return redirect()->route('admin.posts.index');
+        return redirect()->route('admin.posts.show', $newPost);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified Post resource.
      */
     public function show(Post $post)
     {
@@ -55,7 +57,7 @@ class PostController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified Post resource.
      */
     public function edit(Post $post)
     {
@@ -63,7 +65,7 @@ class PostController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Post resource in storage.
      */
     public function update(Request $request, Post $post)
     {
@@ -80,7 +82,7 @@ class PostController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Moves the specified Post resource from storage to the list of deleted Post resources.
      */
     public function destroy(Post $post)
     {
@@ -88,20 +90,37 @@ class PostController extends Controller
         return redirect()->route('admin.posts.index');
     }
 
+    /**
+     * Display  a listing of soft-removed Post resources.
+     *
+     * @return void
+     */
     public function deletedIndex(){
         $posts = Post::onlyTrashed()->paginate(10);
 
         return view('admin.posts.deleted', compact('posts'));
     }
 
-    public function restore($slug){
+    /**
+     * Restores a Post resource from the list of deleted Post resources.
+     *
+     * @param string $slug
+     * @return void
+     */
+    public function restore(string $slug){
         $post = Post::onlyTrashed()->findOrFail($slug);
         $post->restore();
 
         return redirect()->route('admin.posts.show', $post);
     }
 
-    public function obliterate($slug)
+    /**
+     * Permanently removes the single Post resource from the database.
+     *
+     * @param string $slug
+     * @return void
+     */
+    public function obliterate(string $slug)
     {
         $post = Post::onlyTrashed()->findOrFail($slug);
         $post->forceDelete();
