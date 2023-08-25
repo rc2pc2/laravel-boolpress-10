@@ -5,6 +5,9 @@
     <div class="row justify-content-center">
         <div class="col-12">
             <div class="card">
+                <h4 class="card-header">
+                    {{ $post->user->name }}
+                </h4>
                 <h5 class="card-header"> ID: {{ $post->id }} ---- {{ $post->slug }} --- {{ $post->category->name }}</h5>
 
                 {{-- @dump($post->category); --}}
