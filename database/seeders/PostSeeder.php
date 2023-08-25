@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,8 +16,12 @@ class PostSeeder extends Seeder
      */
     public function run(Faker $faker): void
     {
+
+        $categories = Category::all();
+
         for ($i=0; $i < 100; $i++) {
             $newPost = new Post();
+            $newPost->category_id = ($faker->randomElement($categories))->id;
             $newPost->title = ucfirst($faker->unique()->words(4, true));
             $newPost->content = $faker->paragraphs(10, true);
             $newPost->image = $faker->imageUrl(480, 360, 'post', true, 'posts', true, 'png');
