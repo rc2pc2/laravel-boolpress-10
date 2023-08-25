@@ -9,6 +9,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Id</th>
+                        <th scope="col">Author</th>
                         <th scope="col">Title</th>
                         <th scope="col">Slug</th>
                         <th scope="col">Actions</th>
@@ -20,6 +21,9 @@
                             <th>
                                 {{ $post->id }}
                             </th>
+                            <td>
+                                {{ $post->user->name }}
+                            </td>
                             <td>
                                 <strong>
                                     {{ $post->title }}

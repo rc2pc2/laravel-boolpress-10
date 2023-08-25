@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
@@ -17,7 +18,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(15);
+        // dd(Auth::user()->id);
+        $posts = Post::where('user_id',Auth::user()->id)->paginate(10);
+        // dd($posts);
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -51,6 +54,7 @@ class PostController extends Controller
         $newPost = Post::create($data);
 
         $newPost->slug = Str::of("$newPost->id " . $data['title'])->slug('-');
+        $newPost->user_id = Auth::user()->id;
         $newPost->save();
 
         return redirect()->route('admin.posts.show', $newPost);
