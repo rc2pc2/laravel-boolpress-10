@@ -37,6 +37,25 @@
                 </div>
 
 
+            @error('tag_id')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+            <div class="mb-5">
+                <label for="tags" class="form-label">
+                    Tags
+                </label>
+
+                <div>
+                    @foreach ($tags as $tag)
+                        <input type="checkbox" name="tags[]" class="form-check-input" id="tags" value="{{ $tag->id }}" @if ($post->tags->contains($tag->id) ) checked @endif>
+                        <label for="tags" class="form-check-label me-3">
+                            {{ $tag->name }}
+                        </label>
+                    @endforeach
+                </div>
+            </div>
+
+
 
                 @error('image')
                     <div class="alert alert-danger">{{ $message }}</div>

@@ -11,6 +11,14 @@
                 <h5 class="card-header"> ID: {{ $post->id }} ---- {{ $post->slug }} ---
                     {{ $post->category ? $post->category->name : '' }}</h5>
 
+                @if ( count($post->tags) > 0)
+                    <h6 class="card-header">
+                        @foreach ($post->tags as $tag)
+                            {{ $tag->name }} --
+                        @endforeach
+                    </h6>
+                @endif
+
                 {{-- @dump($post->category); --}}
 
                 @if (str_starts_with($post->image, 'http' ))

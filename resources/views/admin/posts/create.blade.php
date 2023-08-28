@@ -23,7 +23,7 @@
                 @enderror
                 <div class="mb-5">
                     <label for="category_id" class="form-label">
-                        Title
+                        Category
                     </label>
                     <select class='form-select' name="category_id" id="category_id">
                         @foreach ($categories as $category)
@@ -33,6 +33,24 @@
                         @endforeach
                     </select>
                 </div>
+
+            @error('tag_id')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+            <div class="mb-5">
+                <label for="tags" class="form-label">
+                    Tags
+                </label>
+
+                <div>
+                    @foreach ($tags as $tag)
+                        <input type="checkbox" name="tags[]" class="form-check-input" id="tags" value="{{ $tag->id }}" @if( in_array($tag->id, old('tags', []))) checked @endif>
+                        <label for="tags" class="form-check-label me-3">
+                            {{ $tag->name }}
+                        </label>
+                    @endforeach
+                </div>
+            </div>
 
 
 

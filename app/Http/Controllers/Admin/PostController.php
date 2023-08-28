@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -31,7 +32,8 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        $tags = Tag::all();
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -39,16 +41,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
-
         $data = $request->validate([
             'title' => ['required', 'unique:posts','min:3', 'max:255'],
-            'image' => ['image'],
+            'image' => ['required', 'image'],
             'content' => ['required', 'min:10'],
-            'category_id' => ['required', 'exists:categories,id']
+            'tags' => ['exists:tags,id'],
+            'category_id' => ['required', 'exists:categories,id'],
         ]);
-
-        // dd($data);
 
         if ($request->hasFile('image')){
             $img_path = Storage::put('uploads/posts', $request['image']);
@@ -61,6 +60,10 @@ class PostController extends Controller
 
         $newPost->slug = Str::of("$newPost->id " . $data['title'])->slug('-');
         $newPost->save();
+
+        if ($request->has('tags')){
+            $newPost->tags()->sync( $request->tags);
+        }
 
         return redirect()->route('admin.posts.show', $newPost);
     }
@@ -78,8 +81,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        $tags = Tag::all();
         $categories = Category::all();
-        return view('admin.posts.edit', compact('post', 'categories'));
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -91,6 +95,7 @@ class PostController extends Controller
             'title' => ['required', 'min:3', 'max:255', Rule::unique('posts')->ignore($post->id)],
             'image' => ['image', 'max:512'],
             'content' => ['required', 'min:10'],
+            'tags' => ['exists:tags,id'],
             'category_id' => ['required', 'exists:categories,id']
         ]);
 
@@ -103,6 +108,10 @@ class PostController extends Controller
         $data['slug'] = Str::of("$post->id " . $data['title'])->slug('-');
 
         $post->update($data);
+
+        if ($request->has('tags')){
+            $post->tags()->sync( $request->tags);
+        }
 
         return redirect()->route('admin.posts.show', compact('post'));
     }
@@ -150,6 +159,7 @@ class PostController extends Controller
     {
         $post = Post::onlyTrashed()->findOrFail($slug);
         Storage::delete($post->image);
+        $post->tags()->detach();
         $post->forceDelete();
 
         return redirect()->route('admin.posts.index');
