@@ -44,7 +44,8 @@
 
                 <div>
                     @foreach ($tags as $tag)
-                        <input type="checkbox" name="tags[]" class="form-check-input" id="tags" value="{{ $tag->id }}" @if( in_array($tag->id, old('tags', []))) checked @endif>
+                        <input type="checkbox" name="tags[]" class="form-check-input" id="tags" value="{{ $tag->id }}"
+                            @if( in_array($tag->id, old('tags', []))) checked @endif>
                         <label for="tags" class="form-check-label me-3">
                             {{ $tag->name }}
                         </label>

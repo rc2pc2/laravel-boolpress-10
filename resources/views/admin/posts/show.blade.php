@@ -19,8 +19,6 @@
                     </h6>
                 @endif
 
-                {{-- @dump($post->category); --}}
-
                 @if (str_starts_with($post->image, 'http' ))
                     <img src="{{ $post->image }}" alt="{{ $post->title }}">
                 @else
