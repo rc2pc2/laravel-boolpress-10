@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::table('posts', function (Blueprint $table) {
             //
-            $table->unsignedBigInteger('category_id')->after('id');
+            $table->unsignedBigInteger('category_id')->after('id')->nullable();
 
             $table->foreign('category_id')
                 ->references('id')
-                ->on('categories');
+                ->on('categories')
+                ->onUpdate('cascade')
+                ->onDelete('set null');
         });
     }
 
