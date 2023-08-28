@@ -8,7 +8,8 @@
                 <h4 class="card-header">
                     {{ $post->user->name }}
                 </h4>
-                <h5 class="card-header"> ID: {{ $post->id }} ---- {{ $post->slug }} --- {{ $post->category->name }}</h5>
+                <h5 class="card-header"> ID: {{ $post->id }} ---- {{ $post->slug }} ---
+                    {{ $post->category ? $post->category->name : '' }}</h5>
 
                 {{-- @dump($post->category); --}}
 

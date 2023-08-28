@@ -19,6 +19,25 @@
                     <input type="text" class="form-control" id="title" placeholder="Insert your post's title" name="title" value="{{ old( 'title' , $post->title) }}">
                 </div>
 
+                @error('category_id')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+                <div class="mb-5">
+                    <label for="category_id" class="form-label">
+                        Title
+                    </label>
+                    <select class='form-select' name="category_id" id="category_id">
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}"
+                                {{ old('category_id', $post->category_id) == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+
+
                 @error('image')
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +30,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = Category::all();
+        return view('admin.posts.create', compact('categories'));
     }
 
     /**
@@ -43,7 +45,10 @@ class PostController extends Controller
             'title' => ['required', 'unique:posts','min:3', 'max:255'],
             'image' => ['image'],
             'content' => ['required', 'min:10'],
+            'category_id' => ['required', 'exists:categories,id']
         ]);
+
+        // dd($data);
 
         if ($request->hasFile('image')){
             $img_path = Storage::put('uploads/posts', $request['image']);
@@ -51,10 +56,10 @@ class PostController extends Controller
         }
 
         $data["slug"] = Str::of($data['title'])->slug('-');
+        $data['user_id'] = Auth::user()->id;
         $newPost = Post::create($data);
 
         $newPost->slug = Str::of("$newPost->id " . $data['title'])->slug('-');
-        $newPost->user_id = Auth::user()->id;
         $newPost->save();
 
         return redirect()->route('admin.posts.show', $newPost);
@@ -73,7 +78,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('admin.posts.edit', compact('post'));
+        $categories = Category::all();
+        return view('admin.posts.edit', compact('post', 'categories'));
     }
 
     /**
@@ -85,6 +91,7 @@ class PostController extends Controller
             'title' => ['required', 'min:3', 'max:255', Rule::unique('posts')->ignore($post->id)],
             'image' => ['image', 'max:512'],
             'content' => ['required', 'min:10'],
+            'category_id' => ['required', 'exists:categories,id']
         ]);
 
         if ($request->hasFile('image')){
