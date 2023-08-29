@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
@@ -22,12 +23,18 @@ class UserSeeder extends Seeder
         $newUser->password= Hash::make('12345678');
         $newUser->save();
 
+        $newUser->roles()->sync([1]);
+
+        $roleIds = Role::all()->pluck('id')->toArray();
+
         for ($i=0; $i < 15; $i++) {
             $newUser = new User();
             $newUser->name = $faker->name();
             $newUser->email= $faker->email();
             $newUser->password= Hash::make($faker->password());
             $newUser->save();
+
+            $newUser->roles()->sync([$faker->randomElement($roleIds)]);
         }
 
     }
