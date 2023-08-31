@@ -11,7 +11,6 @@ class PostController extends Controller
     //
 
     public function index(){
-
         $posts = Post::with('category', 'user', 'tags')->paginate(20);
 
         return response()->json(
@@ -20,5 +19,14 @@ class PostController extends Controller
                 'results' => $posts,
             ]
         );
+    }
+
+    public function show(string $slug){
+        $post = Post::with('category', 'user', 'tags')->findOrFail($slug);
+
+        return response()->json([
+            'success' => true,
+            'results' => $post
+        ]);
     }
 }
