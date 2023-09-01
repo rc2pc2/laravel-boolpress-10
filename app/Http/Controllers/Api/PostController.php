@@ -10,8 +10,16 @@ class PostController extends Controller
 {
     //
 
-    public function index(){
-        $posts = Post::with('category', 'user', 'tags')->paginate(20);
+    public function index(Request   $request){
+        // dd($request->all());
+
+        if ($request->has('search')){
+            $posts = Post::with('category', 'user', 'tags')->where('title', 'LIKE', '%' . $request->search . '%')->paginate(20);
+        } else {
+            $posts = Post::with('category', 'user', 'tags')->paginate(20);
+        }
+
+
 
         return response()->json(
             [
