@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\LeadController as ApiLeadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PostController as ApiPostController;
@@ -22,3 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/posts', [ ApiPostController::class, 'index' ])->name('api.posts.index');
 Route::get('/posts/{post}', [ ApiPostController::class, 'show' ])->name('api.posts.show');
+
+Route::post('/contact-form', [ ApiLeadController::class, 'store'])->name('api.contact-form');
